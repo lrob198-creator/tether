@@ -5,6 +5,7 @@ export interface User {
   name: string;
   email: string;
   createdAt: Date;
+  capacityProfile?: CapacityProfile;
 }
 
 export type EnergyLevel = 'low' | 'medium' | 'high';

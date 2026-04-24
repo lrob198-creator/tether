@@ -97,14 +97,11 @@ export default function Dashboard() {
                 </ul>
               </div>
 
-              <Button
-                variant="secondary"
-                size="md"
-                className="w-full"
-                disabled
-              >
-                Coming Soon
-              </Button>
+              <Link href="/have-capacity/form">
+                <Button variant="secondary" size="md" className="w-full">
+                  Start
+                </Button>
+              </Link>
             </div>
           </Card>
         </div>
