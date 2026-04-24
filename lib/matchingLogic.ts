@@ -1,5 +1,6 @@
 import { SupportRequest, CapacityProfile, Match, SupportCard } from './types';
 import { mockCapacityProfiles, mockUsers } from './mockData';
+import { notificationStorage } from './notifications';
 
 /**
  * Simple rule-based matching algorithm
@@ -63,7 +64,7 @@ export function findMatches(
     .filter((m) => m.score > 0); // Only return meaningful matches
 
   // Convert to Match objects
-  return topMatches.map((m, index) => ({
+  const matches = topMatches.map((m, index) => ({
     id: `match-${request.id}-${index}`,
     supportRequestId: request.id,
     capacityUserId: m.userId,
@@ -77,6 +78,19 @@ export function findMatches(
     matchScore: m.score,
     createdAt: new Date(),
   }));
+
+  // Create notifications for matched capacity users
+  matches.forEach((match) => {
+    notificationStorage.addNotification(match.capacityUserId, {
+      userId: match.capacityUserId,
+      type: 'match_found',
+      title: 'New Support Request Match',
+      message: `Someone needs the type of support you can provide. Check your dashboard for details.`,
+      relatedId: match.id,
+    });
+  });
+
+  return matches;
 }
 
 export function getMatcherProfileInfo(userId: string): CapacityProfile | null {

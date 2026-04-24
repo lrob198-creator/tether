@@ -55,6 +55,17 @@ export interface Match {
   createdAt: Date;
 }
 
+export interface Notification {
+  id: string;
+  userId: string;
+  type: 'match_found' | 'support_requested' | 'profile_completed';
+  title: string;
+  message: string;
+  relatedId?: string; // match id, request id, etc.
+  isRead: boolean;
+  createdAt: Date;
+}
+
 export interface SessionState {
   currentUser: User | null;
   isAuthenticated: boolean;
