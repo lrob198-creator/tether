@@ -22,6 +22,7 @@ export default function Dashboard() {
       return;
     }
     const userData = JSON.parse(userStr);
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setUser(userData);
 
     if (!userData.capacityProfile) {
@@ -140,7 +141,7 @@ export default function Dashboard() {
 
             {notifications.length === 0 && (
               <div className="p-4 rounded-lg bg-white border border-slate-200 text-slate-600">
-                No notifications yet. Once your profile is complete or a match is found, they'll appear here.
+                No notifications yet. Once your profile is complete or a match is found, they&apos;ll appear here.
               </div>
             )}
           </div>
@@ -182,7 +183,7 @@ export default function Dashboard() {
               </div>
 
               <div className="space-y-3 text-sm text-slate-600">
-                <p>You'll tell us:</p>
+                <p>You&apos;ll tell us:</p>
                 <ul className="list-disc list-inside space-y-1 text-slate-500">
                   <li>Your energy level and emotional state</li>
                   <li>What kind of support would help</li>
@@ -214,7 +215,7 @@ export default function Dashboard() {
               </div>
 
               <div className="space-y-3 text-sm text-slate-600">
-                <p>You'll share:</p>
+                <p>You&apos;ll share:</p>
                 <ul className="list-disc list-inside space-y-1 text-slate-500">
                   <li>How much time you have available</li>
                   <li>What kinds of support you can offer</li>
@@ -235,7 +236,7 @@ export default function Dashboard() {
         <div className="border-t border-slate-200 pt-8 mt-12">
           <h3 className="text-lg font-semibold text-slate-900 mb-4">Need immediate help?</h3>
           <p className="text-slate-600 mb-4">
-            If you're in crisis or need urgent support, please reach out to a crisis line or emergency
+            If you&apos;re in crisis or need urgent support, please reach out to a crisis line or emergency
             service in your area.
           </p>
           <Link href="/resources">
