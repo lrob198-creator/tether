@@ -58,7 +58,7 @@ export interface Match {
 export interface Notification {
   id: string;
   userId: string;
-  type: 'match_found' | 'support_requested' | 'profile_completed';
+  type: 'match_found' | 'support_requested' | 'profile_completed' | 'profile_reminder';
   title: string;
   message: string;
   relatedId?: string; // match id, request id, etc.

@@ -8,6 +8,7 @@ import Button from '@/components/Button';
 import Card from '@/components/Card';
 import { SupportRequest } from '@/lib/types';
 import { generateSupportCard, generateCardVariation } from '@/lib/cardGenerator';
+import { notificationStorage } from '@/lib/notifications';
 
 export default function CardReview() {
   const [user, setUser] = useState<any>(null);
@@ -38,6 +39,16 @@ export default function CardReview() {
   const handleApprove = () => {
     // Save the approved card
     sessionStorage.setItem('approvedCard', JSON.stringify(card));
+
+    // Send a confirmation notification to the requester
+    notificationStorage.addNotification(user.id, {
+      userId: user.id,
+      type: 'support_requested',
+      title: 'Support request live',
+      message: 'Your request is now live. We are matching you with available supporters.',
+      relatedId: supportRequest.id,
+    });
+
     // Trigger matching and redirect
     router.push('/matches');
   };

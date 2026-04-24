@@ -24,6 +24,15 @@ export default function Dashboard() {
     const userData = JSON.parse(userStr);
     setUser(userData);
 
+    if (!userData.capacityProfile) {
+      notificationStorage.addUniqueNotification(userData.id, {
+        userId: userData.id,
+        type: 'profile_reminder',
+        title: 'Finish your support profile',
+        message: 'Share your availability and preferred support so others can connect with you more easily.',
+      });
+    }
+
     // Load notifications
     const userNotifications = notificationStorage.getNotifications(userData.id);
     setNotifications(userNotifications);
@@ -71,18 +80,22 @@ export default function Dashboard() {
         </div>
 
         {/* Notifications */}
-        {notifications.length > 0 && (
-          <Card padding="lg" className="border-blue-200 bg-blue-50">
-            <div className="space-y-4">
-              <div className="flex items-center justify-between">
+        <Card padding="lg" className="border-blue-200 bg-blue-50">
+          <div className="space-y-4">
+            <div className="flex flex-col sm:flex-row justify-between gap-4">
+              <div>
                 <h2 className="text-lg font-semibold text-slate-900">
-                  Notifications {unreadCount > 0 && (
-                    <span className="ml-2 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-                      {unreadCount} new
-                    </span>
-                  )}
+                  Notifications
                 </h2>
-                {unreadCount > 0 && (
+                <p className="text-sm text-slate-600 mt-1">
+                  {unreadCount > 0
+                    ? `You have ${unreadCount} new notification${unreadCount !== 1 ? 's' : ''}.`
+                    : 'You are all caught up.'}
+                </p>
+              </div>
+
+              <div className="flex gap-2">
+                {notifications.length > 0 && (
                   <button
                     onClick={handleMarkAllAsRead}
                     className="text-sm text-blue-600 hover:text-blue-800 underline"
@@ -90,38 +103,63 @@ export default function Dashboard() {
                     Mark all as read
                   </button>
                 )}
+                <Link href="/notifications" className="text-sm text-blue-600 hover:text-blue-800 underline">
+                  View all
+                </Link>
               </div>
+            </div>
 
-              <div className="space-y-3">
-                {notifications.slice(0, 3).map((notification) => (
-                  <div
-                    key={notification.id}
-                    className={`p-3 rounded-lg border ${
-                      notification.isRead
-                        ? 'bg-white border-slate-200'
-                        : 'bg-blue-100 border-blue-300'
-                    }`}
-                  >
-                    <div className="flex items-start justify-between">
-                      <div className="flex-1">
-                        <h3 className="font-medium text-slate-900">{notification.title}</h3>
-                        <p className="text-sm text-slate-600 mt-1">{notification.message}</p>
-                        <p className="text-xs text-slate-500 mt-2">
-                          {new Date(notification.createdAt).toLocaleDateString()}
-                        </p>
-                      </div>
-                      {!notification.isRead && (
-                        <button
-                          onClick={() => handleMarkAsRead(notification.id)}
-                          className="ml-3 text-blue-600 hover:text-blue-800 text-sm underline"
-                        >
-                          Mark read
-                        </button>
-                      )}
-                    </div>
+            {notifications.slice(0, 3).map((notification) => (
+              <div
+                key={notification.id}
+                className={`p-3 rounded-lg border ${
+                  notification.isRead
+                    ? 'bg-white border-slate-200'
+                    : 'bg-blue-100 border-blue-300'
+                }`}
+              >
+                <div className="flex items-start justify-between gap-4">
+                  <div className="flex-1">
+                    <h3 className="font-medium text-slate-900">{notification.title}</h3>
+                    <p className="text-sm text-slate-600 mt-1">{notification.message}</p>
+                    <p className="text-xs text-slate-500 mt-2">
+                      {new Date(notification.createdAt).toLocaleDateString()}
+                    </p>
                   </div>
-                ))}
+                  {!notification.isRead && (
+                    <button
+                      onClick={() => handleMarkAsRead(notification.id)}
+                      className="text-blue-600 hover:text-blue-800 text-sm underline"
+                    >
+                      Mark read
+                    </button>
+                  )}
+                </div>
               </div>
+            ))}
+
+            {notifications.length === 0 && (
+              <div className="p-4 rounded-lg bg-white border border-slate-200 text-slate-600">
+                No notifications yet. Once your profile is complete or a match is found, they'll appear here.
+              </div>
+            )}
+          </div>
+        </Card>
+
+        {user && !user.capacityProfile && (
+          <Card padding="lg" className="border-l-4 border-orange-400 bg-orange-50">
+            <div className="space-y-4">
+              <div>
+                <h2 className="text-xl font-semibold text-slate-900">Complete your supporter profile</h2>
+                <p className="text-slate-600">
+                  You’re almost ready to help others. Finish your capacity profile so Tether can match you with people who need support.
+                </p>
+              </div>
+              <Link href="/have-capacity/form">
+                <Button variant="primary" size="md" className="w-full btn-warm">
+                  Complete profile
+                </Button>
+              </Link>
             </div>
           </Card>
         )}

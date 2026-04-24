@@ -10,6 +10,7 @@ import ProgressBar from '@/components/ProgressBar';
 import Select from '@/components/Select';
 import TextArea from '@/components/TextArea';
 import { CapacityProfile, SupportType, PreferredFormat, BandwidthLevel } from '@/lib/types';
+import { notificationStorage } from '@/lib/notifications';
 
 const TOTAL_STEPS = 3;
 
@@ -76,6 +77,15 @@ export default function HaveCapacityForm() {
     // Update user to include capacity profile
     const updatedUser = { ...user, capacityProfile };
     sessionStorage.setItem('currentUser', JSON.stringify(updatedUser));
+
+    // Send a profile completion notification
+    notificationStorage.addNotification(user.id, {
+      userId: user.id,
+      type: 'profile_completed',
+      title: 'Capacity profile ready',
+      message: 'Your helper profile is complete. You are now visible to people who need support.',
+      relatedId: user.id,
+    });
 
     router.push('/have-capacity/profile');
   };

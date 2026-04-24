@@ -6,6 +6,23 @@ export const notificationStorage = {
     return stored ? JSON.parse(stored) : [];
   },
 
+  hasNotification: (userId: string, matcher: (notification: Notification) => boolean): boolean => {
+    return notificationStorage.getNotifications(userId).some(matcher);
+  },
+
+  addUniqueNotification: (
+    userId: string,
+    notification: Omit<Notification, 'id' | 'isRead' | 'createdAt'>
+  ): void => {
+    const notifications = notificationStorage.getNotifications(userId);
+    const exists = notifications.some(
+      (n) => n.type === notification.type && n.title === notification.title && n.relatedId === notification.relatedId
+    );
+
+    if (exists) return;
+    notificationStorage.addNotification(userId, notification);
+  },
+
   addNotification: (userId: string, notification: Omit<Notification, 'id' | 'isRead' | 'createdAt'>): void => {
     const notifications = notificationStorage.getNotifications(userId);
     const newNotification: Notification = {

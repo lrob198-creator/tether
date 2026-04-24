@@ -7,6 +7,7 @@ import Layout from '@/components/Layout';
 import Button from '@/components/Button';
 import Card from '@/components/Card';
 import Input from '@/components/Input';
+import { notificationStorage } from '@/lib/notifications';
 
 export default function AuthPage() {
   const [isSignUp, setIsSignUp] = useState(true);
@@ -43,6 +44,13 @@ export default function AuthPage() {
 
     sessionStorage.setItem('currentUser', JSON.stringify(user));
     sessionStorage.setItem('isAuthenticated', 'true');
+
+    notificationStorage.addNotification(user.id, {
+      userId: user.id,
+      type: 'profile_reminder',
+      title: 'Welcome to Tether',
+      message: 'Your account is ready. Complete your capacity profile so you can help others and receive support faster.',
+    });
 
     // Redirect to dashboard
     router.push('/dashboard');
